@@ -26,6 +26,4 @@ class Command(BaseCommand):
             password=password,
         )
 
-        self.stdout.write("Admin created successfully.")        from django.contrib.auth.models import User
-        User.objects.create_superuser('admin', 'admin@example.com', 'password')        from django.contrib.auth.models import User
-        User.objects.create_superuser('admin', 'admin@example.com', 'password')
+        self.stdout.write("Admin created successfully.")
