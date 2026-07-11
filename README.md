@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TAS — Travel Agency System (Prototype)
 
 This repository contains a modular Django project scaffold for an online travel management system (flights, hotels, packages, bookings, payments, admin dashboard, and REST APIs).
@@ -27,3 +28,6 @@ Notes
 - Uses Django REST Framework + Simple JWT for API auth.
 - Tailwind integration and UI polish are left as next steps (use CDN or django-tailwind).
 - Database defaults to sqlite; set Postgres env vars to use Postgres in production.
+=======
+# TAS-travel
+>>>>>>> 2bf88bb2016351c00b116513835196fc54b365e0
