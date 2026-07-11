@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ package.title }} - MyTrip{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow p-4">
+  <h1 class="text-xl font-semibold">{{ package.title }}</h1>
+  <p class="text-sm text-gray-600">Destination: {{ package.destination }}</p>
+  <p class="mt-2">{{ package.description }}</p>
+  <div class="mt-4 flex items-center justify-between">
+    <div class="text-2xl font-bold">৳{{ package.price }}</div>
+    <div class="flex gap-2">
+      {% url 'package_book' package.pk as book_url %}
+      {% if user.is_authenticated %}
+          {% if user.role == 'user' %}
+            <a href="{{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Book Now</a>
+          {% else %}
+            <span class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md">Admin cannot book</span>
+          {% endif %}
+      {% else %}
+        <a href="{% url 'login' %}?next={{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Login to Book</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

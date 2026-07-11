@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hotels - MyTrip{% endblock %}
+
+{% block content %}
+<header class="relative text-white">
+  {% if hero_image %}
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ hero_image }}');"></div>
+  {% else %}
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static "images/hotels-bg.svg" %}');"></div>
+  {% endif %}
+  <div class="absolute inset-0 bg-black opacity-40"></div>
+  <div class="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-3xl font-bold text-white mb-2">Hotels</h1>
+    <p class="text-sm text-gray-200">Browse hotels and compare prices and ratings.</p>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white rounded-lg shadow p-6">
+    <p>This is a placeholder hotels page. The real API lives under <code>/api/hotels/</code>.</p>
+  </div>
+</main>
+{% endblock %}

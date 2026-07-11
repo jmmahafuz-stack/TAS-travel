@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Flights - MyTrip{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Available Flights</h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {% for f in flights %}
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      {% if f.hero_image %}
+        <a href="{% url 'flight_detail' f.pk %}"><img src="{{ f.hero_image.url }}" alt="{{ f }}" class="w-full h-40 object-cover"></a>
+      {% endif %}
+      <div class="p-4">
+        <div class="font-semibold">{{ f.airline.name }} — {{ f.origin }} → {{ f.destination }}</div>
+        <div class="text-sm text-gray-600">Depart: {{ f.departure_time }} • Class: {{ f.seat_class }}</div>
+        <div class="mt-2 flex items-center justify-between">
+          <div class="text-lg font-bold">৳{{ f.price }}</div>
+          <div class="flex gap-2">
+            <a href="{% url 'flight_detail' f.pk %}" class="text-primary hover:underline">View</a>
+            <a href="{% url 'flight_book' f.pk %}" class="px-3 py-1 bg-primary text-white rounded">Book</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No flights available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

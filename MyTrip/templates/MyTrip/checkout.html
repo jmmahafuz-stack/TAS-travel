@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - MyTrip{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-2">Checkout</h2>
+    <div class="text-sm text-gray-600 mb-4">Please confirm payment for your booking.</div>
+
+    <div class="grid grid-cols-1 gap-2 mb-4">
+      <div><strong>Booking:</strong> {{ booking }}</div>
+      <div><strong>Amount:</strong> ৳{{ booking.total_price }}</div>
+      <div><strong>Status:</strong> <span class="font-semibold">{{ booking.booking_status }}</span></div>
+    </div>
+
+    {% if is_paid %}
+      <div class="p-4 bg-green-50 text-green-800 rounded">This booking is already paid.</div>
+      <div class="mt-4"><a href="{% url 'bookings_page' %}" class="px-3 py-2 bg-primary text-white rounded">Back to bookings</a></div>
+    {% else %}
+      {% if account_number or bkash_number %}
+        <div class="p-4 bg-yellow-50 rounded mb-4">
+          <div class="text-sm font-medium">Pay Number</div>
+          <div class="text-lg font-semibold">{{ account_number|default:bkash_number }}</div>
+        </div>
+      {% endif %}
+
+      <form id="checkout-form" method="post" action="/payments/checkout/process/">
+        {% csrf_token %}
+        <input type="hidden" name="booking_type" value="{{ booking_type }}">
+        <input type="hidden" name="booking_id" value="{{ booking.pk }}">
+
+        <div class="grid grid-cols-1 gap-3 mb-4">
+          <label class="block">
+            <div class="text-sm font-medium">Payer name</div>
+            <input name="payer_name" type="text" required class="mt-1 block w-full border rounded px-2 py-1" placeholder="Your name as on payment">
+          </label>
+
+          <label class="block">
+            <div class="text-sm font-medium">Transaction number</div>
+            <input name="transaction_number" type="text" required class="mt-1 block w-full border rounded px-2 py-1" placeholder="Payment transaction/reference number">
+          </label>
+        </div>
+
+        <button id="confirm-button" type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Confirm Payment</button>
+        <a href="{% url 'bookings_page' %}" class="ml-3 px-3 py-2 bg-gray-200 rounded">Cancel</a>
+      </form>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.getElementById('checkout-form');
+          if (!form) return;
+          form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('confirm-button');
+            btn.disabled = true;
+            const originalText = btn.innerText;
+            btn.innerText = 'Processing...';
+
+            const data = new FormData(form);
+            try {
+              const resp = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+              });
+              const json = await resp.json();
+              if (resp.ok) {
+                  // Redirect to bookings page so user sees the booking (pending status)
+                  window.location.href = "{% url 'bookings_page' %}";
+              } else {
+                const err = json.detail || JSON.stringify(json);
+                const msg = document.createElement('div');
+                msg.className = 'p-4 bg-red-50 text-red-800 rounded mt-4';
+                msg.innerText = err;
+                form.parentNode.appendChild(msg);
+                btn.disabled = false;
+                btn.innerText = originalText;
+              }
+            } catch (err) {
+              const msg = document.createElement('div');
+              msg.className = 'p-4 bg-red-50 text-red-800 rounded mt-4';
+              msg.innerText = 'Network error while processing payment.';
+              form.parentNode.appendChild(msg);
+              btn.disabled = false;
+              btn.innerText = originalText;
+            }
+          });
+        });
+      </script>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

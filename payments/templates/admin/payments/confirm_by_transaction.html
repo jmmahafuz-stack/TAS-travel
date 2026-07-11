@@ -1,0 +1,65 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_title %}Confirm Payments by Transaction{% endblock %}
+
+{% block content %}
+  <h2 class="text-xl font-semibold mb-4">Confirm Payments by Transaction</h2>
+
+  <form method="get" class="mb-4">
+    <label class="block text-sm font-medium">Transaction number or partial</label>
+    <div class="flex gap-2 mt-2">
+      <input name="q" value="{{ query|default:'' }}" class="border rounded px-2 py-1 flex-1" placeholder="Enter transaction number...">
+      <button type="submit" class="px-3 py-1 bg-primary text-white rounded">Search</button>
+    </div>
+  </form>
+
+  {% if payments %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="overflow-auto border rounded">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="p-2 text-left">Select</th>
+              <th class="p-2 text-left">ID</th>
+              <th class="p-2 text-left">User</th>
+              <th class="p-2 text-left">Booking type</th>
+              <th class="p-2 text-left">Booking id</th>
+              <th class="p-2 text-left">Amount</th>
+              <th class="p-2 text-left">Status</th>
+              <th class="p-2 text-left">Transaction</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in payments %}
+              <tr class="border-t">
+                <td class="p-2"><input type="checkbox" name="payment_id" value="{{ p.id }}" checked></td>
+                <td class="p-2">{{ p.id }}</td>
+                <td class="p-2">{{ p.user }}</td>
+                <td class="p-2">{{ p.booking_type }}</td>
+                <td class="p-2">{{ p.booking_id }}</td>
+                <td class="p-2">৳{{ p.amount }}</td>
+                <td class="p-2">{{ p.payment_status }}</td>
+                <td class="p-2">{{ p.transaction_id }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4">
+        <button type="submit" name="confirm" value="1" class="px-3 py-2 bg-green-600 text-white rounded">Confirm selected</button>
+        {% if back_url %}
+          <a href="{{ back_url }}" class="ml-3 px-3 py-2 bg-gray-200 rounded">Back</a>
+        {% else %}
+          <a href="{% url 'admin:payments_payment_changelist' %}" class="ml-3 px-3 py-2 bg-gray-200 rounded">Back to payments</a>
+        {% endif %}
+      </div>
+    </form>
+  {% else %}
+    {% if query %}
+      <div class="p-4 bg-yellow-50 text-yellow-800 rounded">No payments found for "{{ query }}".</div>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

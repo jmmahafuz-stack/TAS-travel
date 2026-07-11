@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - MyTrip{% endblock %}
+
+{% block content %}
+<header class="bg-white">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+    <p class="text-sm text-gray-600">Site dashboard and quick stats (placeholder).</p>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <a href="{% url 'dashboard_detail' 'users' %}" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg hover:bg-green-50 transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm text-gray-500">Total users</div>
+          <div class="text-2xl font-bold">{{ total_users }}</div>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-green-300 hover:bg-green-500"></div>
+      </div>
+    </a>
+
+    <a href="{% url 'dashboard_detail' 'bookings' %}" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg hover:bg-green-50 transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm text-gray-500">Total bookings</div>
+          <div class="text-2xl font-bold">{{ total_bookings }}</div>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-green-300 hover:bg-green-500"></div>
+      </div>
+    </a>
+
+    <a href="{% url 'dashboard_detail' 'revenue' %}" class="block bg-white rounded-lg shadow p-6 hover:shadow-lg hover:bg-green-50 transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm text-gray-500">Revenue</div>
+          <div class="text-2xl font-bold">৳{{ revenue }}</div>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-green-300 hover:bg-green-500"></div>
+      </div>
+    </a>
+  </div>
+</main>
+{% endblock %}

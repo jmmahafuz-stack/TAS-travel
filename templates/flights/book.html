@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Flight - MyTrip{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded p-6">
+  <h2 class="text-xl font-semibold mb-3">Book Flight</h2>
+  <div class="mb-3">{{ flight.airline.name }} — {{ flight.origin }} → {{ flight.destination }}</div>
+  <div class="mb-3">Price: <strong>৳{{ flight.price }}</strong></div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="block text-sm">Passenger Name</label>
+      <input name="name" class="block w-full rounded border-gray-200 p-2" required>
+    </div>
+    <div class="flex justify-end">
+      <button class="px-4 py-2 bg-primary text-white rounded">Confirm Booking</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

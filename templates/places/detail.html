@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ place.name }} - MyTrip{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow p-4">
+  <h1 class="text-xl font-semibold">{{ place.name }}</h1>
+  <p class="text-sm text-gray-600">{{ place.city }}</p>
+  <div class="mt-3">{{ place.description }}</div>
+
+  <h3 class="mt-4 font-semibold">Activities</h3>
+  <ul class="mt-2">
+    {% for a in place.activities.all %}
+      <li>{{ a.title }} — ৳{{ a.price }}</li>
+    {% empty %}
+      <li>No activities listed.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

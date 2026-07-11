@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results - MyTrip{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <h1 class="text-2xl font-bold">Search Results</h1>
+  <p class="text-sm text-gray-600">Results for "{{ q }}" — category: {{ category }}</p>
+</div>
+
+<div class="space-y-6">
+  {% if not q %}
+    <div class="bg-white rounded p-4">No search query provided. Use the search box above.</div>
+  {% else %}
+    {% if results.flights %}
+      <section>
+        <h2 class="text-lg font-semibold mb-3">Flights</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for f in results.flights %}
+            <div class="bg-white rounded shadow p-3">
+              <div class="flex justify-between">
+                <div>
+                  <div class="font-medium">{{ f.origin }} → {{ f.destination }}</div>
+                  <div class="text-sm text-gray-500">Airline id: {{ f.airline_id }}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-lg font-semibold">৳{{ f.price }}</div>
+                  <a href="/api/flights/{{ f.id }}/" class="text-sm text-primary">API</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if results.hotels %}
+      <section>
+        <h2 class="text-lg font-semibold mb-3">Hotels</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for h in results.hotels %}
+            <div class="bg-white rounded shadow p-3 flex justify-between">
+              <div>
+                <div class="font-medium">{{ h.name }}</div>
+                <div class="text-sm text-gray-500">{{ h.city }}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-semibold">৳{{ h.price_per_night }}</div>
+                <a href="/api/hotels/{{ h.id }}/" class="text-sm text-primary">API</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if results.packages %}
+      <section>
+        <h2 class="text-lg font-semibold mb-3">Packages</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for p in results.packages %}
+            <div class="bg-white rounded shadow p-3 flex justify-between">
+              <div>
+                <div class="font-medium">{{ p.title }}</div>
+                <div class="text-sm text-gray-500">{{ p.destination }}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-semibold">৳{{ p.price }}</div>
+                <a href="/api/packages/{{ p.id }}/" class="text-sm text-primary">API</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if results.places %}
+      <section>
+        <h2 class="text-lg font-semibold mb-3">Places</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for p in results.places %}
+            <div class="bg-white rounded shadow p-3 flex justify-between items-center">
+              <div>
+                <div class="font-medium">{{ p.name }}</div>
+                <div class="text-sm text-gray-500">{{ p.city }}</div>
+              </div>
+              <div class="text-right">
+                <a href="/places/{{ p.id }}/" class="text-sm text-primary">View</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% if not results.flights and not results.hotels and not results.packages %}
+      <div class="bg-white rounded p-4">No results found.</div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

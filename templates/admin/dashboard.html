@@ -1,0 +1,35 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Admin Dashboard - MyTrip{% endblock %}
+
+{% block admin_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-xl font-semibold">Welcome Admin</h2>
+      <div class="text-sm text-gray-500">Administrator dashboard</div>
+    </div>
+    <div>
+      <a href="{% url 'logout' %}" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Logout</a>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-white rounded-lg shadow p-4">
+      <div class="text-sm text-gray-500">Total Users</div>
+      <div class="text-2xl font-bold">{{ total_users }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <div class="text-sm text-gray-500">Total Bookings</div>
+      <div class="text-2xl font-bold">{{ total_bookings }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <div class="text-sm text-gray-500">Revenue</div>
+       <div class="text-2xl font-bold">৳{{ revenue }}</div>
+    </div>
+  </div>
+
+  
+</div>
+{% endblock %}

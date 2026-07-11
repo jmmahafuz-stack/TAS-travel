@@ -1,0 +1,103 @@
+<!-- Navbar: website navigation - admin management menus hidden from public site -->
+<nav class="bg-white shadow relative z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <button type="button" onclick="toggleTheme()" class="hidden sm:block absolute right-6 top-3 p-2 rounded-md hover:bg-gray-100 z-50" aria-label="Toggle dark mode"><span class="dark-toggle">🌙</span></button>
+    <div class="flex justify-between h-16">
+      <div class="flex items-center gap-6">
+        <a href="{% url 'MyTrip' %}" class="text-xl font-bold text-primary">MyTrip</a>
+
+        <div class="hidden sm:flex sm:space-x-4">
+          <a href="{% url 'MyTrip' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">🏠</span>Home</a>
+          <a href="{% url 'flights_page' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">✈️</span>Flights</a>
+          <a href="{% url 'hotels_page' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">🏨</span>Hotels</a>
+          <a href="{% url 'packages_page' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">📦</span>Packages</a>
+          <a href="{% url 'offers_page' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">🎉</span>Offers</a>
+          {% if user.is_authenticated and user.role == 'user' %}
+            <a href="{% url 'bookings_page' %}" class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-primary"><span class="mr-2">🧾</span>My Bookings</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <form method="get" action="{% url 'search' %}" class="hidden md:flex items-center gap-2 mr-4">
+          <select name="type" class="rounded-md border-gray-200 text-sm p-2">
+            <option value="all">All</option>
+            <option value="flights">Flights</option>
+            <option value="hotels">Hotels</option>
+            <option value="packages">Packages</option>
+            <option value="places">Places</option>
+          </select>
+          <input name="q" type="search" placeholder="Search destinations, flights..." class="rounded-md border-gray-200 p-2 text-sm w-64">
+          <button type="submit" class="px-3 py-2 bg-primary text-white rounded-md text-sm">Search</button>
+        </form>
+
+        <div class="ml-4 flex items-center">
+          {% if user.is_authenticated %}
+            <div class="relative">
+              <button id="profile-btn" class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100">
+                <span class="text-sm">{{ user.first_name|default:user.username }}</span>
+              </button>
+              <div id="profile-menu" class="hidden absolute right-0 mt-2 w-52 bg-white shadow-lg rounded-md py-1 z-50">
+                {% if user.is_staff or user.role == 'admin' %}
+                  <a href="{% url 'admin:password_change' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Change password</a>
+                {% else %}
+                  <a href="{% url 'user_dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                {% endif %}
+                <div class="border-t"></div>
+                <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+              </div>
+            </div>
+          {% else %}
+            <a href="{% url 'login' %}" class="text-sm px-3 py-2 text-gray-700 hover:text-primary">Login</a>
+            <a href="{% url 'register' %}" class="ml-2 text-sm px-3 py-2 bg-primary text-white rounded-md">Register</a>
+          {% endif %}
+        </div>
+
+        <div class="-mr-2 flex items-center sm:hidden">
+          <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700">
+            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="sm:hidden hidden px-2 pt-2 pb-3 space-y-1 z-50">
+    <a href="{% url 'MyTrip' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">🏠</span>Home</a>
+    <a href="{% url 'flights_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">✈️</span>Flights</a>
+    <a href="{% url 'hotels_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">🏨</span>Hotels</a>
+    <a href="{% url 'packages_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">📦</span>Packages</a>
+    <a href="{% url 'offers_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">🎉</span>Offers</a>
+
+    <button type="button" onclick="toggleTheme()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Toggle dark mode</button>
+
+    {% if user.is_authenticated %}
+      {% if user.is_staff or user.role == 'admin' %}
+        <a href="{% url 'MyTrip' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">View site</a>
+        <a href="{% url 'admin:password_change' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Change password</a>
+        <!-- logout handled by the fixed Logout button in the header -->
+      {% else %}
+        {% if user.role == 'user' %}
+          <a href="{% url 'bookings_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"><span class="mr-2">🧾</span>My Bookings</a>
+        {% endif %}
+        <a href="{% url 'logout' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Logout</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'login' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Login</a>
+      <a href="{% url 'register' %}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-primary hover:bg-primary/90">Register</a>
+    {% endif %}
+  </div>
+
+  <script>
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', function(){
+      const el = document.getElementById('mobile-menu'); if (el) el.classList.toggle('hidden');
+    });
+    document.getElementById('profile-btn')?.addEventListener('click', function(){
+      const m = document.getElementById('profile-menu'); if (m) m.classList.toggle('hidden');
+    });
+    // admin-btn removed - no admin dropdown on public site
+  </script>
+</nav>

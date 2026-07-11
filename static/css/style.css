@@ -1,0 +1,59 @@
+/* Small custom styles for the site */
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+/* Hero and spacing styles used by front-end pages */
+.display-4 {
+  font-weight: 600;
+}
+.navbar-brand {
+  font-weight: 600;
+}
+
+.lead {
+  color: #555;
+}
+
+.py-5 {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.rounded-3 {
+  border-radius: 0.5rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+/* Footer background image */
+.site-footer {
+  position: relative;
+  /* Single background image (SVG fallback) */
+  background-image: url('../images/footer-bg.svg');
+  background-color: #7DD3FC; /* fallback color while image loads */
+  background-size: cover;
+  background-position: center;
+  color: #ffffff; /* white text for contrast over image */
+  overflow: hidden;
+}
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* subtle dark overlay to improve text contrast over images */
+  background: rgba(16, 60, 255, 0.28);
+  z-index: 0;
+}
+.site-footer .max-w-7xl,
+.site-footer .max-w-7xl * {
+  position: relative;
+  z-index: 1;
+}
+.site-footer .border-t {
+  border-color: rgba(178, 213, 241, 0.08);
+  background: transparent;
+}
+.site-footer a { color: #083344; }

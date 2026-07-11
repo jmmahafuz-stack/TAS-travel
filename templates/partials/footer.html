@@ -1,0 +1,53 @@
+{% load static %}
+<footer role="contentinfo" class="site-footer bg-slate-900 text-gray-200" {% if footer_image %}style="background-image: url('{{ footer_image }}');"{% endif %}>
+  <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <div>
+      <h3 class="text-sm font-semibold text-white uppercase mb-4">Explore</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/about/" class="hover:text-white">About Us</a></li>
+        <li><a href="/terms/" class="hover:text-white">Terms &amp; Conditions</a></li>
+        <li><a href="/faq/" class="hover:text-white">FAQ</a></li>
+        <li><a href="/contact/" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-white uppercase mb-4">Services</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/flights/" class="hover:text-white">Flights</a></li>
+        <li><a href="/hotels/" class="hover:text-white">Hotels</a></li>
+        <li><a href="/packages/" class="hover:text-white">Packages</a></li>
+        <li><a href="/bookings/" class="hover:text-white">My Bookings</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-white uppercase mb-4">Useful Links</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/privacy/" class="hover:text-white">Privacy Policy</a></li>
+        <li><a href="/cookie/" class="hover:text-white">Cookie Policy</a></li>
+        <li><a href="/sitemap.xml" class="hover:text-white">Sitemap</a></li>
+        <li class="text-xs text-gray-400 mt-3">Licenses:</li>
+        <li class="text-xs text-gray-400">MOCAT: <span class="font-medium text-gray-100">#MOCAT-XXXXX</span></li>
+        <li class="text-xs text-gray-400">IATA: <span class="font-medium text-gray-100">#IATA-XXXXX</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-sm font-semibold text-white uppercase mb-4">Promotions</h3>
+      <p class="text-sm text-gray-300 mb-3">Sign up to receive our best deals and exclusive offers.</p>
+      <form action="/subscribe/" method="post" class="flex gap-2" aria-label="Subscribe to promotions">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Your email" required class="w-full rounded-md bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-gray-200" />
+        <button class="px-3 py-2 bg-primary text-white rounded-md text-sm">Subscribe</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="border-t border-slate-700 mt-6 py-4">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between text-sm text-gray-400 items-center">
+      <div>© {% now "Y" %} MyTrip. All rights reserved.</div>
+      <div class="mt-2 sm:mt-0">License placeholders — MOCAT: <span class="text-gray-200 font-medium">#MOCAT-XXXXX</span> | IATA: <span class="text-gray-200 font-medium">#IATA-XXXXX</span></div>
+    </div>
+  </div>
+</footer>

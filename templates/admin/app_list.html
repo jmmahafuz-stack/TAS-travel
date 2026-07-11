@@ -1,0 +1,62 @@
+{% load i18n bookings_admin_tags %}
+
+<style>
+.pending-badge {
+  display: inline-block;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 20px;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+</style>
+
+{% if app_list %}
+  {% for app in app_list %}
+    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+      <table>
+        <caption>
+          <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+        </caption>
+        <thead class="visually-hidden">
+          <tr>
+            <th scope="col">{% trans 'Model name' %}</th>
+            <th scope="col">{% trans 'Add link' %}</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        {% for model in app.models %}
+          {% with model_name=model.object_name|lower %}
+            <tr class="model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+              <th scope="row" id="{{ app.app_label }}-{{ model_name }}">
+                {% if model.admin_url %}
+                  <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a>
+                  {% pending_badge app.app_label model.object_name %}
+                {% else %}
+                  {{ model.name }}
+                {% endif %}
+              </th>
+
+              {% if model.add_url %}
+                <td><a href="{{ model.add_url }}" class="addlink" aria-describedby="{{ app.app_label }}-{{ model_name }}">{% trans 'Add' %}</a></td>
+              {% else %}
+                <td></td>
+              {% endif %}
+
+              {% if model.admin_url and show_changelinks %}
+                <td><a href="{{ model.admin_url }}" class="changelink" aria-describedby="{{ app.app_label }}-{{ model_name }}">Action</a></td>
+              {% elif show_changelinks %}
+                <td></td>
+              {% endif %}
+            </tr>
+          {% endwith %}
+        {% endfor %}
+      </table>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>{% trans "You don't have permission to view or edit anything." %}</p>
+{% endif %}

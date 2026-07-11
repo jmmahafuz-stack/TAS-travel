@@ -1,0 +1,50 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Manage Flights{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-bold">Flights</h1>
+  <a href="{% url 'dashboard-manage-flights-add' %}" class="px-3 py-2 bg-primary text-white rounded">Add Flight</a>
+</div>
+
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">Airline</th>
+        <th class="px-4 py-2 text-left">Origin</th>
+        <th class="px-4 py-2 text-left">Destination</th>
+        <th class="px-4 py-2 text-left">Departure</th>
+        <th class="px-4 py-2 text-left">Arrival</th>
+        <th class="px-4 py-2 text-left">Class</th>
+        <th class="px-4 py-2 text-right">Price</th>
+        <th class="px-4 py-2 text-right">Seats</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      {% for f in flights %}
+      <tr>
+        <td class="px-4 py-2">{{ f.airline.name }}</td>
+        <td class="px-4 py-2">{{ f.origin }}</td>
+        <td class="px-4 py-2">{{ f.destination }}</td>
+        <td class="px-4 py-2">{{ f.departure_time }}</td>
+        <td class="px-4 py-2">{{ f.arrival_time }}</td>
+        <td class="px-4 py-2">{{ f.get_seat_class_display }}</td>
+        <td class="px-4 py-2 text-right">৳{{ f.price }}</td>
+        <td class="px-4 py-2 text-right">{{ f.available_seats }}</td>
+        <td class="px-4 py-2">
+          <a href="{% url 'dashboard-manage-flights-edit' f.pk %}" class="text-blue-600">Edit</a>
+          &nbsp;|&nbsp;
+          <a href="{% url 'dashboard-manage-flights-delete' f.pk %}" class="text-red-600">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" class="p-4 text-center text-gray-600">No flights found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

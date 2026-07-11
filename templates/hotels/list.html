@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Hotels - MyTrip{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">Hotels</h1>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  {% for h in hotels %}
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      {% if h.thumbnail %}
+        <a href="{% url 'hotel_detail' h.pk %}"><img src="{{ h.thumbnail.url }}" alt="{{ h.name }}" class="w-full h-40 object-cover"></a>
+      {% elif h.hero_image %}
+        <a href="{% url 'hotel_detail' h.pk %}"><img src="{{ h.hero_image.url }}" alt="{{ h.name }}" class="w-full h-40 object-cover"></a>
+      {% endif %}
+      <div class="p-4">
+        <div class="font-semibold">{{ h.name }}</div>
+        <div class="text-sm text-gray-600">{{ h.city }}</div>
+        <div class="mt-2 flex items-center justify-between">
+          <div class="text-lg font-bold">৳{{ h.price_per_night }}</div>
+          <div class="flex gap-2">
+            <a href="{% url 'hotel_detail' h.pk %}" class="text-primary hover:underline">View</a>
+            <a href="{% url 'hotel_book' h.pk %}" class="px-3 py-1 bg-primary text-white rounded">Book</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hotels available.</p>
+  {% endfor %}
+</div>
+{% endblock %}

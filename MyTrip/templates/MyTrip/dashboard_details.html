@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Details - MyTrip{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Details: {{ stat|title }}</h2>
+
+    {% if stat == 'users' %}
+      <ul class="divide-y">
+        {% for u in items %}
+          <li class="py-2">
+            <div class="font-medium">{{ u.get_full_name|default:u.username }}</div>
+            <div class="text-sm text-gray-600">{{ u.email }}</div>
+          </li>
+        {% empty %}
+          <li class="text-sm text-gray-600">No users found.</li>
+        {% endfor %}
+      </ul>
+
+    {% elif stat == 'bookings' %}
+      <h3 class="font-semibold mt-2">Flights</h3>
+      <ul class="divide-y mb-4">
+        {% for b in flights %}
+          <li class="py-2">
+            <div><strong>{{ b.user }}</strong> — {{ b.flight.airline.name }} {{ b.flight.origin }}→{{ b.flight.destination }} — {{ b.booking_status }}</div>
+          </li>
+        {% empty %}
+          <li class="text-sm text-gray-600">No flight bookings.</li>
+        {% endfor %}
+      </ul>
+
+      <h3 class="font-semibold mt-2">Hotels</h3>
+      <ul class="divide-y mb-4">
+        {% for b in hotels %}
+          <li class="py-2">
+            <div><strong>{{ b.user }}</strong> — {{ b.hotel.name }} ({{ b.hotel.city }}) — {{ b.booking_status }}</div>
+          </li>
+        {% empty %}
+          <li class="text-sm text-gray-600">No hotel bookings.</li>
+        {% endfor %}
+      </ul>
+
+      <h3 class="font-semibold mt-2">Packages</h3>
+      <ul class="divide-y mb-4">
+        {% for b in packages %}
+          <li class="py-2">
+            <div><strong>{{ b.user }}</strong> — {{ b.package.title }} — {{ b.booking_status }}</div>
+          </li>
+        {% empty %}
+          <li class="text-sm text-gray-600">No package bookings.</li>
+        {% endfor %}
+      </ul>
+
+    {% elif stat == 'revenue' %}
+      <ul class="divide-y">
+        {% for p in payments %}
+          <li class="py-2">
+            <div><strong>{{ p.user }}</strong> — ৳{{ p.amount }} — {{ p.payment_status }} — {{ p.created_at }}</div>
+          </li>
+        {% empty %}
+          <li class="text-sm text-gray-600">No payments.</li>
+        {% endfor %}
+      </ul>
+
+    {% else %}
+      <p class="text-sm text-gray-600">Unknown stat.</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

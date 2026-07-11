@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Package Booking Details{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-2">Package Booking</h2>
+    <div class="text-sm text-gray-600 mb-4">Booked: {{ booking.created_at|date:"SHORT_DATETIME_FORMAT" }}</div>
+
+    <div class="mb-4 border-t pt-4">
+      <h3 class="font-semibold">Your details</h3>
+      <div class="text-sm">{{ booking.user.get_full_name|default:booking.user.username }} — {{ booking.user.email }}</div>
+    </div>
+
+    {% if booking.booking_status == 'confirmed' %}
+      <div class="p-4 bg-green-50 text-green-800 rounded mb-4">This booking has been confirmed by admin.</div>
+    {% endif %}
+    <div class="grid grid-cols-1 gap-2">
+      <div><strong>Package:</strong> {{ booking.package.title }}</div>
+      <div><strong>Destination:</strong> {{ booking.package.destination }}</div>
+      <div><strong>Duration:</strong> {{ booking.package.duration_days }} days</div>
+      <div><strong>Booking status:</strong> <span class="font-semibold">{{ booking.booking_status }}</span></div>
+      <div><strong>Total paid:</strong> ৳{{ booking.total_price }}</div>
+    </div>
+
+    <div class="mt-4">
+      <div class="flex items-center gap-3">
+        <a href="{% url 'bookings_page' %}" class="px-3 py-2 bg-primary text-white rounded">Back to bookings</a>
+        {% if booking.booking_status != 'cancelled' %}
+          {% if is_paid %}
+            <span class="px-3 py-2 bg-green-100 text-green-800 rounded">Payment received</span>
+          {% else %}
+            <a href="{% url 'checkout' 'package' booking.pk %}" class="px-3 py-2 bg-green-600 text-white rounded">Make Payment</a>
+          {% endif %}
+          <form method="post" action="{% url 'package_booking_cancel' booking.pk %}" onsubmit="return confirm('Cancel this package booking?');">
+            {% csrf_token %}
+            <button type="submit" class="px-3 py-2 bg-red-500 text-white rounded">Cancel booking</button>
+          </form>
+        {% else %}
+          <div class="text-sm text-gray-500">Cancelled</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

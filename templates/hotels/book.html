@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Hotel - MyTrip{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded p-6">
+  <h2 class="text-xl font-semibold mb-3">Book Hotel</h2>
+  <div class="mb-3">{{ hotel.name }} — {{ hotel.city }}</div>
+  <div class="mb-3">Price per night: <strong>৳{{ hotel.price_per_night }}</strong></div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="block text-sm">Check-in</label>
+      <input type="date" name="check_in" class="block w-full rounded border-gray-200 p-2">
+    </div>
+    <div class="mb-3">
+      <label class="block text-sm">Check-out</label>
+      <input type="date" name="check_out" class="block w-full rounded border-gray-200 p-2">
+    </div>
+    <div class="flex justify-end">
+      <button class="px-4 py-2 bg-primary text-white rounded">Confirm Booking</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

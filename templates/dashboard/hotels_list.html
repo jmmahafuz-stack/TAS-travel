@@ -1,0 +1,42 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Manage Hotels{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-bold">Hotels</h1>
+  <a href="{% url 'dashboard-manage-hotels-add' %}" class="px-3 py-2 bg-primary text-white rounded">Add Hotel</a>
+</div>
+
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">Name</th>
+        <th class="px-4 py-2 text-left">City</th>
+        <th class="px-4 py-2 text-right">Price</th>
+        <th class="px-4 py-2 text-right">Rating</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      {% for h in hotels %}
+      <tr>
+        <td class="px-4 py-2">{{ h.name }}</td>
+        <td class="px-4 py-2">{{ h.city }}</td>
+        <td class="px-4 py-2 text-right">৳{{ h.price_per_night }}</td>
+        <td class="px-4 py-2 text-right">{{ h.rating }}</td>
+        <td class="px-4 py-2">
+          <a href="{% url 'dashboard-manage-hotels-edit' h.pk %}" class="text-blue-600">Edit</a>
+          &nbsp;|&nbsp;
+          <a href="{% url 'dashboard-manage-hotels-delete' h.pk %}" class="text-red-600">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="p-4 text-center text-gray-600">No hotels found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

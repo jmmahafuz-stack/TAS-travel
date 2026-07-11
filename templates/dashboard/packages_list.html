@@ -1,0 +1,42 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Manage Packages{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-bold">Packages</h1>
+  <a href="{% url 'dashboard-manage-packages-add' %}" class="px-3 py-2 bg-primary text-white rounded">Add Package</a>
+</div>
+
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">Title</th>
+        <th class="px-4 py-2 text-left">Destination</th>
+        <th class="px-4 py-2 text-right">Price</th>
+        <th class="px-4 py-2 text-right">Duration</th>
+        <th class="px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      {% for p in packages %}
+      <tr>
+        <td class="px-4 py-2">{{ p.title }}</td>
+        <td class="px-4 py-2">{{ p.destination }}</td>
+        <td class="px-4 py-2 text-right">৳{{ p.price }}</td>
+        <td class="px-4 py-2 text-right">{{ p.duration_days }}d</td>
+        <td class="px-4 py-2">
+          <a href="{% url 'dashboard-manage-packages-edit' p.pk %}" class="text-blue-600">Edit</a>
+          &nbsp;|&nbsp;
+          <a href="{% url 'dashboard-manage-packages-delete' p.pk %}" class="text-red-600">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="p-4 text-center text-gray-600">No packages found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

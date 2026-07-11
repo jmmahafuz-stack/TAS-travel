@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Flight {{ flight }} - MyTrip{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow p-4">
+  {% if flight.hero_image %}
+    <div class="mb-4"><img src="{{ flight.hero_image.url }}" alt="{{ flight }}" class="w-full h-64 object-cover rounded-lg"></div>
+  {% endif %}
+  <h1 class="text-xl font-semibold">{{ flight.airline.name }} — {{ flight.origin }} → {{ flight.destination }}</h1>
+  <p class="text-sm text-gray-600">Depart: {{ flight.departure_time }} • Arrive: {{ flight.arrival_time }}</p>
+  <p class="mt-2">Class: {{ flight.seat_class }} • Seats: {{ flight.available_seats }}</p>
+  <div class="mt-4 flex items-center justify-between">
+    <div class="text-2xl font-bold">৳{{ flight.price }}</div>
+    {% url 'flight_book' flight.pk as book_url %}
+    {% if user.is_authenticated %}
+      {% if user.role == 'user' %}
+        <a href="{{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Book Now</a>
+      {% else %}
+        <span class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md">Admin cannot book</span>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'login' %}?next={{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Login to Book</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

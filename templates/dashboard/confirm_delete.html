@@ -1,0 +1,15 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Confirm Delete</h2>
+    <p class="mb-4">Are you sure you want to delete this {{ type }}: <strong>{{ object }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="px-3 py-2 bg-red-600 text-white rounded">Yes, delete</button>
+      <a href="javascript:history.back()" class="ml-2 text-gray-600">Cancel</a>
+    </form>
+  </div>
+{% endblock %}
