@@ -1,15 +1,31 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User
+from django.core.management.base import BaseCommand
+from django.contrib.auth import get_user_model
+import os
 
+User = get_user_model()
 
-class CustomUserAdmin(UserAdmin):
-    model = User
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('role',)}),
-    )
-    list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_staff')
+class Command(BaseCommand):
+    help = "Create admin if it does not exist"
 
-# User admin registration intentionally removed to hide `accounts`
-# from the admin homepage. Register again here if you need the
-# User model visible/managed in the admin UI.
+    def handle(self, *args, **kwargs):
+        username = os.getenv("ADMIN_USERNAME")
+        email = os.getenv("ADMIN_EMAIL")
+        password = os.getenv("ADMIN_PASSWORD")
+
+        if not username or not password:
+            self.stdout.write("Admin environment variables are missing.")
+            return
+
+        if User.objects.filter(username=username).exists():
+            self.stdout.write("Admin already exists.")
+            return
+
+        User.objects.create_superuser(
+            username=username,
+            email=email,
+            password=password,
+        )
+
+        self.stdout.write("Admin created successfully.")        from django.contrib.auth.models import User
+        User.objects.create_superuser('admin', 'admin@example.com', 'password')        from django.contrib.auth.models import User
+        User.objects.create_superuser('admin', 'admin@example.com', 'password')
