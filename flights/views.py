@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from .models import Flight
 import requests
@@ -10,13 +12,22 @@ import requests
 
 def flight_list(request):
 
+    q = request.GET.get('q', '').strip()
     flights = Flight.objects.all()
+
+    if q:
+        flights = flights.filter(
+            Q(origin__icontains=q) |
+            Q(destination__icontains=q) |
+            Q(airline__name__icontains=q)
+        )
 
     return render(
         request,
         "flights/list.html",
         {
-            "flights": flights
+            "flights": flights,
+            "search_query": q,
         }
     )
 
@@ -44,40 +55,30 @@ def flight_detail_template(request, pk):
     weather = None
 
 
-    # Check if flight has connected Place
-    if flight.place:
+    q = None
+    if flight.place and flight.place.city:
+        q = flight.place.city
+    elif flight.destination:
+        q = flight.destination
 
-        api_key = "c2c6443607524638ada160717261307"
-
-
-        url = "http://api.weatherapi.com/v1/current.json"
-
-
+    if q:
+        api_key = getattr(settings, 'WEATHER_API_KEY', None)
+        url = "https://api.weatherapi.com/v1/current.json"
         params = {
-
             "key": api_key,
-
-            "q": flight.place.city
-
+            "q": q
         }
 
-
         try:
-
             response = requests.get(
                 url,
                 params=params,
                 timeout=10
             )
 
-
             if response.status_code == 200:
-
                 weather = response.json()
-
-
         except requests.exceptions.RequestException:
-
             weather = None
 
 
