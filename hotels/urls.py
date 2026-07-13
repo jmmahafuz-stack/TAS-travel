@@ -1,7 +1,20 @@
 from django.urls import path
-from .views import HotelListView, HotelDetailView
+from . import views
+
 
 urlpatterns = [
-	path('', HotelListView.as_view(), name='hotel-list'),
-	path('<int:pk>/', HotelDetailView.as_view(), name='hotel-detail'),
+
+    path(
+        "",
+        views.hotel_list_template,
+        name="hotel-list"
+    ),
+
+
+    path(
+        "<int:pk>/",
+        views.hotel_detail_template,
+        name="hotel-detail"
+    ),
+
 ]

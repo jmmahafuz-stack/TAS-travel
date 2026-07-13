@@ -1,27 +1,269 @@
 {% extends 'base.html' %}
 
-{% block title %}Flight {{ flight }} - MyTrip{% endblock %}
+
+{% block title %}
+Flight {{ flight }} - MyTrip
+{% endblock %}
+
+
 
 {% block content %}
+
 <div class="bg-white rounded-lg shadow p-4">
-  {% if flight.hero_image %}
-    <div class="mb-4"><img src="{{ flight.hero_image.url }}" alt="{{ flight }}" class="w-full h-64 object-cover rounded-lg"></div>
-  {% endif %}
-  <h1 class="text-xl font-semibold">{{ flight.airline.name }} — {{ flight.origin }} → {{ flight.destination }}</h1>
-  <p class="text-sm text-gray-600">Depart: {{ flight.departure_time }} • Arrive: {{ flight.arrival_time }}</p>
-  <p class="mt-2">Class: {{ flight.seat_class }} • Seats: {{ flight.available_seats }}</p>
-  <div class="mt-4 flex items-center justify-between">
-    <div class="text-2xl font-bold">৳{{ flight.price }}</div>
-    {% url 'flight_book' flight.pk as book_url %}
-    {% if user.is_authenticated %}
-      {% if user.role == 'user' %}
-        <a href="{{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Book Now</a>
-      {% else %}
-        <span class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md">Admin cannot book</span>
-      {% endif %}
-    {% else %}
-      <a href="{% url 'login' %}?next={{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Login to Book</a>
+
+
+    {% if flight.hero_image %}
+
+    <img 
+    src="{{ flight.hero_image.url }}"
+    alt="{{ flight }}"
+    class="w-full h-64 object-cover rounded-lg mb-4">
+
     {% endif %}
-  </div>
+
+
+
+    <!-- Flight Information -->
+
+    <h1 class="text-xl font-semibold">
+
+        {{ flight.airline.name }}
+
+        —
+
+        {{ flight.origin }}
+
+        →
+
+        {{ flight.destination }}
+
+    </h1>
+
+
+
+    <p class="text-gray-600 mt-2">
+
+        Departure:
+        {{ flight.departure_time }}
+
+    </p>
+
+
+
+    <p class="text-gray-600">
+
+        Arrival:
+        {{ flight.arrival_time }}
+
+    </p>
+
+
+
+    <p class="mt-2">
+
+        Class:
+        {{ flight.seat_class }}
+
+    </p>
+
+
+
+    <p>
+
+        Available Seats:
+        {{ flight.available_seats }}
+
+    </p>
+
+
+
+    <h2 class="text-2xl font-bold mt-4">
+
+        ৳{{ flight.price }}
+
+    </h2>
+
+
+
+    <hr class="my-6">
+
+
+
+    <!-- Weather API Section -->
+
+    <h2 class="text-xl font-semibold">
+
+        Destination Weather
+
+    </h2>
+
+
+
+    {% if weather %}
+
+
+    <div class="bg-gray-100 p-4 rounded-lg mt-3">
+
+
+        <p>
+
+            Location:
+
+            <b>
+            {{ weather.location.name }},
+            {{ weather.location.country }}
+            </b>
+
+        </p>
+
+
+
+        <p>
+
+            Temperature:
+
+            <b>
+            {{ weather.current.temp_c }} °C
+            </b>
+
+        </p>
+
+
+
+        <p>
+
+            Condition:
+
+            <b>
+            {{ weather.current.condition.text }}
+            </b>
+
+        </p>
+
+
+
+        <p>
+
+            Humidity:
+
+            <b>
+            {{ weather.current.humidity }} %
+            </b>
+
+        </p>
+
+
+
+        <p>
+
+            Wind:
+
+            <b>
+            {{ weather.current.wind_kph }} km/h
+            </b>
+
+        </p>
+
+
+
+        {% if weather.current.condition.icon %}
+
+        <img 
+        src="https:{{ weather.current.condition.icon }}"
+        alt="Weather Icon"
+        class="mt-3 w-16">
+
+
+        {% endif %}
+
+
+
+    </div>
+
+
+
+    {% else %}
+
+
+
+    <p class="mt-3 text-gray-600">
+
+        Weather data not available.
+
+    </p>
+
+
+
+    {% endif %}
+
+
+
+
+
+    <!-- Booking Button -->
+
+    <div class="mt-6">
+
+
+        {% url 'flight_book' flight.pk as book_url %}
+
+
+
+        {% if user.is_authenticated %}
+
+
+
+            {% if user.role == 'user' %}
+
+
+
+                <a href="{{ book_url }}"
+                class="px-4 py-2 bg-primary text-white rounded-md">
+
+                    Book Now
+
+                </a>
+
+
+
+            {% else %}
+
+
+
+                <span class="px-4 py-2 bg-gray-200 rounded-md">
+
+                    Admin cannot book
+
+                </span>
+
+
+
+            {% endif %}
+
+
+
+        {% else %}
+
+
+
+            <a href="{% url 'login' %}?next={{ book_url }}"
+            class="px-4 py-2 bg-primary text-white rounded-md">
+
+                Login to Book
+
+            </a>
+
+
+
+        {% endif %}
+
+
+
+    </div>
+
+
+
 </div>
+
+
 {% endblock %}

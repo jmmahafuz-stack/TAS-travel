@@ -12,6 +12,7 @@ urlpatterns = [
     path('flights/', flights_views.flight_list_template, name='flights_page'),
     path('flights/<int:pk>/', flights_views.flight_detail_template, name='flight_detail'),
     path('flights/<int:pk>/book/', flights_views.flight_book_view, name='flight_book'),
+    path('flights/', flights_views.flight_list_template, name='flights_page'),
     path('hotels/', hotels_views.hotel_list_template, name='hotels_page'),
     path('hotels/<int:pk>/', hotels_views.hotel_detail_template, name='hotel_detail'),
     path('hotels/<int:pk>/book/', hotels_views.hotel_book_view, name='hotel_book'),

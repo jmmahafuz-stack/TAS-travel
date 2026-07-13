@@ -1,7 +1,22 @@
 from django.urls import path
-from .views import FlightListView, FlightDetailView
+from . import views
+
 
 urlpatterns = [
-    path('', FlightListView.as_view(), name='flight-list'),
-    path('<int:pk>/', FlightDetailView.as_view(), name='flight-detail'),
+
+    # API flight list
+    path(
+        "",
+        views.flight_list_template,
+        name="flight_list"
+    ),
+
+
+    # API flight detail
+    path(
+        "<int:pk>/",
+        views.flight_detail_template,
+        name="flight_detail"
+    ),
+
 ]

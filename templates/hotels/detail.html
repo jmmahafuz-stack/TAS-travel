@@ -1,29 +1,125 @@
 {% extends 'base.html' %}
 
-{% block title %}Hotel {{ hotel.name }} - MyTrip{% endblock %}
+
+{% block title %}
+Hotel {{ hotel.name }} - MyTrip
+{% endblock %}
+
+
 
 {% block content %}
+
+
 <div class="bg-white rounded-lg shadow p-4">
-  {% if hotel.hero_image %}
-    <div class="mb-4"><img src="{{ hotel.hero_image.url }}" alt="{{ hotel.name }}" class="w-full h-64 object-cover rounded-lg"></div>
-  {% elif hotel.thumbnail %}
-    <div class="mb-4"><img src="{{ hotel.thumbnail.url }}" alt="{{ hotel.name }}" class="w-full h-64 object-cover rounded-lg"></div>
-  {% endif %}
-  <h1 class="text-xl font-semibold">{{ hotel.name }}</h1>
-  <p class="text-sm text-gray-600">{{ hotel.city }}</p>
-  <p class="mt-2">Price per night: ৳{{ hotel.price_per_night }}</p>
-  <div class="mt-4 flex items-center justify-between">
-    <div class="text-2xl font-bold">৳{{ hotel.price_per_night }}</div>
-    {% url 'hotel_book' hotel.pk as book_url %}
-    {% if user.is_authenticated %}
-      {% if user.role == 'user' %}
-        <a href="{{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Book Now</a>
-      {% else %}
-        <span class="px-4 py-2 bg-gray-200 text-gray-600 rounded-md">Admin cannot book</span>
-      {% endif %}
-    {% else %}
-      <a href="{% url 'login' %}?next={{ book_url }}" class="px-4 py-2 bg-primary text-white rounded-md">Login to Book</a>
-    {% endif %}
-  </div>
+
+
+{% if hotel.hero_image %}
+
+<img 
+src="{{ hotel.hero_image.url }}"
+class="w-full h-64 object-cover rounded-lg mb-4">
+
+{% endif %}
+
+
+
+<h1 class="text-xl font-bold">
+{{ hotel.name }}
+</h1>
+
+
+<p>
+{{ hotel.city }}
+</p>
+
+
+<p>
+Price:
+৳{{ hotel.price_per_night }}
+</p>
+
+
+
+<!-- WEATHER SECTION START -->
+
+<h2 class="text-xl font-bold mt-5">
+Weather Information
+</h2>
+
+
+{% if weather %}
+
+<div class="bg-gray-100 p-4 rounded mt-3">
+
+
+<p>
+Location:
+<b>{{ weather.location.name }}</b>
+</p>
+
+
+<p>
+Country:
+<b>{{ weather.location.country }}</b>
+</p>
+
+
+<p>
+Temperature:
+<b>{{ weather.current.temp_c }} °C</b>
+</p>
+
+
+<p>
+Condition:
+<b>{{ weather.current.condition.text }}</b>
+</p>
+
+
+<p>
+Humidity:
+<b>{{ weather.current.humidity }} %</b>
+</p>
+
+
+<p>
+Wind:
+<b>{{ weather.current.wind_kph }} km/h</b>
+</p>
+
+
+<img 
+src="https:{{ weather.current.condition.icon }}"
+class="mt-3">
+
+
 </div>
+
+
+{% else %}
+
+
+<p class="text-gray-600 mt-3">
+Weather data not available.
+</p>
+
+
+{% endif %}
+
+
+<!-- WEATHER SECTION END -->
+
+
+
+<a href="{% url 'hotel_book' hotel.pk %}"
+class="px-4 py-2 bg-primary text-white rounded-md inline-block mt-5">
+
+Book Now
+
+</a>
+
+
+</div>
+
+
 {% endblock %}

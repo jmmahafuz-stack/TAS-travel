@@ -197,3 +197,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Authentication redirects used by `login_required` and convenience
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'user_dashboard'
+WEATHER_API_KEY = "c2c6443607524638ada160717261307"

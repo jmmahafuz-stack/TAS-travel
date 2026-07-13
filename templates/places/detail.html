@@ -8,6 +8,42 @@
   <p class="text-sm text-gray-600">{{ place.city }}</p>
   <div class="mt-3">{{ place.description }}</div>
 
+
+  <!-- Weather API Section -->
+  <div class="mt-5 p-4 bg-blue-50 rounded">
+    <h2 class="text-lg font-semibold">
+      🌤 Weather Information
+    </h2>
+
+    {% if weather.current %}
+      <p class="mt-2">
+        Temperature:
+        {{ weather.current.temp_c }} °C
+      </p>
+
+      <p>
+        Condition:
+        {{ weather.current.condition.text }}
+      </p>
+
+      <p>
+        Humidity:
+        {{ weather.current.humidity }} %
+      </p>
+
+      <p>
+        Wind:
+        {{ weather.current.wind_kph }} km/h
+      </p>
+
+    {% else %}
+      <p>
+        Weather information unavailable.
+      </p>
+    {% endif %}
+  </div>
+
+
   <h3 class="mt-4 font-semibold">Activities</h3>
   <ul class="mt-2">
     {% for a in place.activities.all %}
@@ -16,5 +52,6 @@
       <li>No activities listed.</li>
     {% endfor %}
   </ul>
+
 </div>
 {% endblock %}

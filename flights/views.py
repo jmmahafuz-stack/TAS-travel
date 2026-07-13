@@ -1,55 +1,119 @@
-from rest_framework import generics, permissions
+from django.shortcuts import render, get_object_or_404
 from .models import Flight
-from .serializers import FlightSerializer
+import requests
 
 
-class FlightListView(generics.ListAPIView):
-    serializer_class = FlightSerializer
-    permission_classes = [permissions.AllowAny]
 
-    def get_queryset(self):
-        qs = Flight.objects.select_related('airline').all()
-        origin = self.request.query_params.get('origin')
-        destination = self.request.query_params.get('destination')
-        date = self.request.query_params.get('date')
-        if origin:
-            qs = qs.filter(origin__icontains=origin)
-        if destination:
-            qs = qs.filter(destination__icontains=destination)
-        if date:
-            qs = qs.filter(departure_time__date=date)
-        return qs
+# ======================================
+# API / Website Flight List
+# ======================================
 
+def flight_list(request):
 
-class FlightDetailView(generics.RetrieveAPIView):
-    queryset = Flight.objects.select_related('airline').all()
-    serializer_class = FlightSerializer
-    permission_classes = [permissions.AllowAny]
+    flights = Flight.objects.all()
+
+    return render(
+        request,
+        "flights/list.html",
+        {
+            "flights": flights
+        }
+    )
 
 
-# Template-based frontend views
-from django.shortcuts import render, get_object_or_404, redirect
-from accounts.decorators import user_required
-from django.contrib import messages
-from bookings.models import FlightBooking
 
-
+# Keep this name also for your MyTrip urls.py
 def flight_list_template(request):
-    flights = Flight.objects.select_related('airline').all().order_by('departure_time')
-    return render(request, 'flights/list.html', {'flights': flights})
 
+    return flight_list(request)
+
+
+
+# ======================================
+# Flight Details + Weather API
+# ======================================
 
 def flight_detail_template(request, pk):
-    flight = get_object_or_404(Flight, pk=pk)
-    return render(request, 'flights/detail.html', {'flight': flight})
+
+    flight = get_object_or_404(
+        Flight,
+        pk=pk
+    )
 
 
-@user_required
+    weather = None
+
+
+    # Check if flight has connected Place
+    if flight.place:
+
+        api_key = "c2c6443607524638ada160717261307"
+
+
+        url = "http://api.weatherapi.com/v1/current.json"
+
+
+        params = {
+
+            "key": api_key,
+
+            "q": flight.place.city
+
+        }
+
+
+        try:
+
+            response = requests.get(
+                url,
+                params=params,
+                timeout=10
+            )
+
+
+            if response.status_code == 200:
+
+                weather = response.json()
+
+
+        except requests.exceptions.RequestException:
+
+            weather = None
+
+
+
+    return render(
+        request,
+
+        "flights/detail.html",
+
+        {
+            "flight": flight,
+
+            "weather": weather
+        }
+    )
+
+
+
+# ======================================
+# Booking Page
+# ======================================
+
 def flight_book_view(request, pk):
-    flight = get_object_or_404(Flight, pk=pk)
-    if request.method == 'POST':
-        booking = FlightBooking.objects.create(user=request.user, flight=flight, total_price=flight.price, booking_status='pending')
-        # Do not create a paid Payment here — user must use 'Pay Now' from My Bookings.
-        messages.success(request, 'Flight added to My Bookings. Use "Pay Now" to complete payment.')
-        return redirect('bookings_page')
-    return render(request, 'flights/book.html', {'flight': flight})
+
+    flight = get_object_or_404(
+        Flight,
+        pk=pk
+    )
+
+
+    return render(
+        request,
+
+        "flights/book.html",
+
+        {
+            "flight": flight
+        }
+    )
